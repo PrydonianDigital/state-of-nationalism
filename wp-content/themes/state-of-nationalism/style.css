@@ -1,0 +1,193 @@
+/*
+Theme Name: State of Nationalism
+Theme URI: https://stateofnationalism.eu
+Description: Updated theme for State of Nationalism
+Version: 2.0
+Author: Mark Duwe
+Author URI: http://prydonian.digital
+Tags:
+License: Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License
+License URI: http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US
+Text Domain: vgg
+*/
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+.hero-section {
+	margin-bottom: 1rem;
+	background-size: cover;
+	min-height: 350px;
+	max-height: 50vh;
+	text-align: center;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	background-position: center center !important;
+	background-size: cover !important;
+	background-attachment: fixed !important;
+	box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+}
+.hero-section.homePage {
+	min-height: 500px;
+	max-height: 70vh;
+}
+.top-bar .button {
+	margin-bottom: 0 !important;
+}
+.hero-section .hero-section-text {
+  color: #fefefe;
+  text-shadow: 1px 1px 2px #0a0a0a;
+}
+.hero-section h1 {
+	font-size: 6rem;
+	line-height: 1.1;
+}
+.hero-section h2 {
+	font-size: 4rem;
+	line-height: 1.1;
+}
+.widget, .columns.bibliography, .row.post {
+	padding-bottom: 1rem;
+	border-bottom: 1px solid #e6e6e6;
+	margin-bottom: 1rem;
+}
+.widget .post-date {
+	display: block;
+}
+.textwidget {
+	font-size: 0.75rem;
+	line-height: 1.2;
+	overflow-wrap: break-word;
+	margin-top; 1rem;
+}
+footer {
+	width: 100%;
+	padding: 0.5rem;
+	margin-top: 1rem;
+	color: #222;
+}
+footer a {
+}
+footer a:hover {
+}
+.row.page {
+	padding-top: 1rem;
+}
+.topbar-center-logo .top-bar-center {
+  -webkit-flex: 1 0 auto;
+      -ms-flex: 1 0 auto;
+          flex: 1 0 auto;
+}
+.dark {
+	background-color: #1b1b1b;
+	background-image: -moz-linear-gradient(top, #222222, #111111);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#222222), to(#111111));
+	background-image: -webkit-linear-gradient(top, #222222, #111111);
+	background-image: -o-linear-gradient(top, #222222, #111111);
+	background-image: linear-gradient(to bottom, #222222, #111111);
+	background-repeat: repeat-x;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ff222222', endColorstr='#ff111111', GradientType=0);
+	border-color: #252525;
+}
+.dark ul {
+	background: transparent;
+	width: auto;
+	margin: 0 auto;
+}
+.dark a, .single-bibliography .current_page_parent a {
+	color: #999;
+}
+.dark li {
+	border-right: 1px solid #999;
+	border-radius: 0;
+}
+.dark li:last-child {
+	border: 0;
+}
+.current-menu-item, .current_page_parent {
+	border-radius: 3px;
+}
+.current-menu-item a, .current_page_parent a, .dark a:hover {
+	color: #fff;
+}
+.post-type-archive-bibliography .current_page_parent a {
+	color: #999;
+}
+.single-bibliography .menu-item-object-bibliography a {
+	color: #fff;
+}
+@media screen and (max-width: 1025px) {
+	.hero-section {
+		min-height: 250px;
+		background-position: center center !important;
+		background-size: cover !important;
+		background-attachment: scroll !important;
+	}
+	.hero-section h1 {
+		font-size: 4rem;
+	}
+	.hero-section h2 {
+		font-size: 2rem;
+	}
+}
+@media screen and (max-width: 600px) {
+	.hero-section {
+		background-position: center center !important;
+		background-size: cover !important;
+		background-attachment: scroll !important;
+	}
+	.hero-section h1 {
+		font-size: 2.5rem;
+		text-shadow: 1px 1px 1px #000;
+	}
+	.hero-section h2 {
+		font-size: 1.5rem;
+		text-shadow: 1px 1px 1px #000;
+	}
+}
+.alignleft {
+	float: left;
+	margin: 0 0.5rem 0 0;
+}
+.alignright {
+	float: right;
+	margin: 0 0 0 0.5rem;
+}
+ol {
+	margin-left: 2.25rem !important;
+}
+.card img {
+	width: 100%;
+	height: auto;
+}
+.sidebar p {
+	font-size: 0.75rem;
+}
+.text-right .text-right {
+	text-align: right !important;
+}
+.searchwp-highlight {
+	display: inline-block;
+	padding: 0 4px;
+	background: #efefef;
+}
+.moreinfo {
+	display: none;
+}
+#recordDetails {
+	word-break: break-word;
+	padding: 1em 0.5em;
+}
+.button.plus {
+	margin-bottom: 0 !important;
+}
