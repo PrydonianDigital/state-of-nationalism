@@ -18,14 +18,14 @@
 
 	<div class="off-canvas-content" data-off-canvas-content>
 		<?php
-			$cat = get_queried_object()->term_id;
-			$image_id = get_term_meta( $cat, 'image', true );
-			$image_data = wp_get_attachment_image_src( $image_id, 'full' );
-			$image = $image_data[0];
+			$page = get_page_by_title( 'Home' );
+			$image =  $page->ID;
+			$thumb = get_the_post_thumbnail_url( $image, 'full' );
 		?>
 		<?php get_template_part('parts/top', 'nav'); ?>
-		<div class="hero-section" style="background: url(<?php echo $image; ?>)">
+		<div class="hero-section" style="background: url(<?php echo $thumb; ?>)" role="banner" itemscope itemtype="http://schema.org/WPHeader">
 			<div class="hero-section-text">
 				<h1><?php single_cat_title(); ?></h1>
 			</div>
 		</div>
+

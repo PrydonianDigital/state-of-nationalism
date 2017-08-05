@@ -11,9 +11,11 @@
 		set_post_thumbnail_size( 870, 250, array( 'center', 'top') );
 		add_image_size( 'top', 1130, 500, array( 'center', 'center') );
 		add_image_size( 'tiny', 100, 100);
+		add_image_size( 'media', 60, 60, array( 'center', 'center'));
 		add_image_size( 'related', 265, 199, array( 'center', 'center') );
 		add_image_size( 'squared', 265, 265, array( 'center', 'top') );
 		add_image_size( 'shop', 355, 355 );
+		add_image_size( 'tiny', 5, 5 );
 		add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption' ) );
 		add_theme_support( 'title-tag' );
 		show_admin_bar(false);
@@ -30,21 +32,21 @@
 
 	// Register Style
 	function son_css() {
-		wp_register_style( 'grid', get_template_directory_uri() . '/css/grid.css', false, '6.3.1' );
+		wp_register_style( 'grid', get_template_directory_uri() . '/icons/foundation-icons.css', false, '3.0' );
+		wp_register_style( 'fi', get_template_directory_uri() . '/css/grid.css', false, '6.3.1' );
 		wp_enqueue_style( 'grid' );
+		wp_enqueue_style( 'fi' );
 	}
 	add_action( 'wp_enqueue_scripts', 'son_css' );
 
 	// Register JS
 	function son_js() {
 		wp_enqueue_script('jquery');
-		wp_enqueue_script( 'fa', 'https://use.fontawesome.com/bfa003177d.js', false, '4.7.0', false );
 		wp_enqueue_script( 'what', get_template_directory_uri() . '/js/vendor/what-input.js', false, '6.3.1', true );
 		wp_enqueue_script( 'foundation', get_template_directory_uri() . '/js/vendor/foundation.min.js', false, '6.3.1', true );
 		wp_enqueue_script( 'son', get_template_directory_uri() . '/js/son.js', false, '1', true );
 		wp_enqueue_script( 'what' );
 		wp_enqueue_script( 'foundation' );
-		wp_enqueue_script( 'fa' );
 		wp_enqueue_script( 'son' );
 	}
 	add_action( 'wp_enqueue_scripts', 'son_js' );
@@ -95,60 +97,11 @@
 	}
 	add_filter( 'get_the_archive_title', 'grd_custom_archive_title' );
 
-	function order_posts( $query ) {
-		if ( $query->is_main_query() ) {
-			$query->set( 'orderby', 'title');
-			$query->set( 'order', 'ASC' );
-			return $query;
-		}
-	}
-	add_action( 'pre_get_posts', 'order_posts');
-
 	function son_sidebars() {
 		$args = array(
-			'id'			=> 'home',
+			'id'			=> 'sidebar',
 			'class'		 => 'menu vertical',
-			'name'		  => __( 'Home', 'son' ),
-			'before_title'  => '<h5>',
-			'after_title'   => '</h5>',
-		);
-		register_sidebar( $args );
-		$args = array(
-			'id'			=> 'articles',
-			'class'		 => 'menu vertical',
-			'name'		  => __( 'Articles Sidebar', 'son' ),
-			'before_title'  => '<h5>',
-			'after_title'   => '</h5>',
-		);
-		register_sidebar( $args );
-		$args = array(
-			'id'			=> 'post',
-			'class'		 => 'menu vertical',
-			'name'		  => __( 'Single Article Sidebar', 'son' ),
-			'before_title'  => '<h5>',
-			'after_title'   => '</h5>',
-		);
-		register_sidebar( $args );
-		$args = array(
-			'id'			=> 'bibliography',
-			'class'		 => 'menu vertical',
-			'name'		  => __( 'Bibliography Archive Sidebar', 'son' ),
-			'before_title'  => '<h5>',
-			'after_title'   => '</h5>',
-		);
-		register_sidebar( $args );
-		$args = array(
-			'id'			=> 'singlebibliography',
-			'class'		 => 'menu vertical',
-			'name'		  => __( 'Single Bibliography Sidebar', 'son' ),
-			'before_title'  => '<h5>',
-			'after_title'   => '</h5>',
-		);
-		register_sidebar( $args );
-		$args = array(
-			'id'			=> 'page',
-			'class'		 => 'menu vertical',
-			'name'		  => __( 'Page', 'son' ),
+			'name'		  => __( 'Sidebar', 'son' ),
 			'before_title'  => '<h5>',
 			'after_title'   => '</h5>',
 		);

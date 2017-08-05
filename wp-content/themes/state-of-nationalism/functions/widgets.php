@@ -13,30 +13,32 @@
 			$title = apply_filters( 'widget_title', $instance['title']);
 			echo '<li class="widget"><h5>' . $title . '</h5>';
 			$args = array(
-				'post_type'              => array( 'post' ),
+				'post_type'             => array( 'post' ),
+				'order'					=> 'DESC',
+				'orderby'				=> 'date'
 			);
 			$published = new WP_Query( $args );
 			if ( $published->have_posts() ) :
-				while ( $published->have_posts() ) :
-					$published->the_post();
+				while ( $published->have_posts() ) : $published->the_post();
 					echo '<div class="row">';
-					echo '<div class="small-12 columns"><a href="' . get_the_permalink() . '"><div class="callout small secondary"><h6>' . get_the_title() . '</h6>';
+					echo '<div class="small-12 columns"><a href="' . get_the_permalink() . '"><div class="callout primary small"><h6>' . get_the_title() . ' <small>';
 					$entries = get_post_meta( get_the_ID(), '_author_author', true );
-					if( $entries != '' ){
-						$authorstr = array();
-						foreach ( (array) $entries as $key => $entry ) {
-							$authorstr[] = esc_html( $entry['_author'] );
-						}
-						echo '<small>' .implode(', ', $authorstr) . ', ' . get_the_date('Y') . '</small>';
+					$out = array();
+					foreach ( (array) $entries as $key => $entry ) {
+						$author = '';
+						if ( isset( $entry['author'] ) )
+							$author = get_the_title( $entry['author'] );
+						array_push($out, "$author");
 					}
-					echo '</div></a></div>';
+					echo '<br>' . implode(', ', $out);
+					echo ' ' . get_the_date('Y');
+					echo '</small></h6></div></a></div>';
 					echo '</div>';
 				endwhile;
 				echo '</li>';
 			endif;
 			wp_reset_postdata();
 		}
-
 		function form( $instance ) {
 			if ( isset( $instance[ 'title' ] ) ) {
 				$title = $instance[ 'title' ];
@@ -121,28 +123,29 @@
 		}
 		function widget( $args, $instance) {
 		?>
-		<li class="widget">
+		<li class="widget author">
 		<?php
-			$connected = new WP_Query( array(
-				'connected_type' => 'author_article',
-				'connected_items' => get_queried_object(),
-				'nopaging' => true,
-			) );
-			if ( $connected->have_posts() ) : while ( $connected->have_posts() ) : $connected->the_post();
+			echo '<div class="row">';
+			echo '<div class="small-12 columns">';
+			$entries = get_post_meta( get_the_ID(), '_author_author', true );
+			foreach ( (array) $entries as $key => $entry ) {
+				$author = '';
+				if ( isset( $entry['author'] ) )
+					$author = esc_html( $entry['author'] );
 		?>
 			<div class="card">
 				<div class="card-divider">
-					<?php the_title(); ?>
+					<?php echo get_the_title($author); ?>
 				</div>
-				<?php the_post_thumbnail('squared'); ?>
+				<?php echo get_the_post_thumbnail($author, 'squared'); ?>
 				<div class="card-section">
-					<?php the_content(); ?>
+					<?php $content = get_post($author); setup_postdata( $content, $more_link_text, $stripteaser ); the_content(); wp_reset_postdata( $content );  ?>
 				</div>
 			</div>
 		<?php
-			endwhile;
-			wp_reset_postdata();
-			endif;
+			}
+			echo '</div>';
+			echo '</div>';
 		?>
 		</li>
 		<?php
@@ -181,11 +184,13 @@
 		function widget( $args, $instance) {
 			$title = apply_filters( 'widget_title', $instance['title']);
 		?>
-		<li class="widget">
+		<li class="widget" itemscope itemtype="http://schema.org/WebSite">
+		<meta itemprop="url" content="<?php echo bloginfo('url'); ?>"/>
 		<h5><?php echo $title; ?></h5>
-		<form role="search" method="get" class="searchform group" action="<?php echo home_url( '/' ); ?>">
+		<form role="search" method="get" class="searchform group" action="<?php echo home_url( '/' ); ?>" itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction">
+			<meta itemprop="target" content="<?php echo bloginfo('url'); ?>?post_type=post&s={s}"/>
 			<div class="input-group">
-				<input class="input-group-field" type="text" placeholder="Search..." value="<?php echo get_search_query(); ?>" name="s">
+				<input itemprop="query-input" class="input-group-field" type="text" placeholder="Search..." value="<?php echo get_search_query(); ?>" name="s">
 				<input type="hidden" name="post_type" value="post" />
 				<div class="input-group-button">
 					<input type="submit" class="button" value="Search">

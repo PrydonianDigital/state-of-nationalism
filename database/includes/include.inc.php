@@ -21,6 +21,8 @@
 	// functions that are shared
 	// between all scripts.
 
+	$base_url="http://".$_SERVER['SERVER_NAME'].'/bibliography/';
+	//echo $base_url;
 
 	// Incorporate some include files:
 	include 'initialize/db.inc.php'; // 'db.inc.php' is included to hide username and password
@@ -3689,7 +3691,7 @@ EOF;
 					$queryParametersArrayTemp[$field] = $escapedItem;
 
 				// Generate item link:
-				$linkifiedFieldItems[] = "<a id=\"".$fieldNamesArray[$field]."\" data-".htmlspecialchars($fieldNamesArray[$field])."=\"" . $queryParametersArrayTemp[$field] . "\" href=\"?".htmlspecialchars($fieldNamesArray[$field])."=" . $queryParametersArrayTemp[$field] . "\""
+				$linkifiedFieldItems[] = "<a id=\"".$fieldNamesArray[$field]."\" class=\"modal1\" data-".htmlspecialchars($fieldNamesArray[$field])."=\"" . $queryParametersArrayTemp[$field] . "\" href=\"".$base_url."?".htmlspecialchars($fieldNamesArray[$field])."=" . $queryParametersArrayTemp[$field] . "\""
 				                       . " title=\"" . $loc["LinkTitle_SearchFieldItem_Prefix"] . $fieldNamesArray[$field] . $loc["LinkTitle_SearchFieldItem_Suffix"] . encodeHTML($item) . "\">"
 				                       . encodeField($field, $item, $localSearchReplaceActionsArray, $encodingExceptionsArray) // HTML encode special chars AND apply any field-specific search & replace actions
 				                       . "</a>";

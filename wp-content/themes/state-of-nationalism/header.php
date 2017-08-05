@@ -17,10 +17,14 @@
 	</div>
 
 	<div class="off-canvas-content" data-off-canvas-content>
-		<?php $thumbnail = get_the_post_thumbnail_url('', 'full'); ?>
+		<?php
+			$page = get_page_by_title( 'Home' );
+			$image =  $page->ID;
+			$thumb = get_the_post_thumbnail_url( $image, 'full' );
+		?>
 		<?php get_template_part('parts/top', 'nav'); ?>
-		<div class="hero-section" style="background: url(<?php echo $thumbnail; ?>)">
+		<div class="hero-section" style="background: url(<?php echo $thumb; ?>)"  role="banner" itemscope itemtype="http://schema.org/WPHeader">
 			<div class="hero-section-text">
-				<h1><?php the_title(); ?></h1>
+				<h1 itemprop="headline"><?php the_title(); ?></h1>
 			</div>
 		</div>

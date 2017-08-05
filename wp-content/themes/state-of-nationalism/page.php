@@ -14,7 +14,7 @@
 
 	</div>
 
-	<?php get_sidebar('page'); ?>
+	<?php get_sidebar('sidebar'); ?>
 
 </div>
 

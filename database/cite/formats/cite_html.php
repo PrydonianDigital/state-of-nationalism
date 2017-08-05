@@ -23,7 +23,11 @@
 
 	// --------------------------------------------------------------------
 
+	$base_url="http://".$_SERVER['SERVER_NAME'].'/bibliography/';
+	//echo $base_url;
+
 	// --- BEGIN CITATION FORMAT ---
+
 
 	function citeRecords($result, $rowsFound, $query, $queryURL, $showQuery, $showLinks, $rowOffset, $showRows, $previousOffset, $nextOffset, $wrapResults, $citeStyle, $citeOrder, $citeType, $orderBy, $headerMsg, $userID, $viewType)
 	{
@@ -58,7 +62,7 @@
 			$displayType = $_SESSION['userDefaultView']; // get the default view for the current user
 
 		 // If the results footer is displayed, we increase the colspan value by 1 to account for the checkbox column:
-		if ((!preg_match("/^(Print|Mobile)$/i", $viewType)) AND (!preg_match("/^cli/i", $client)) AND ($wrapResults != "0") AND (!isset($displayResultsFooterDefault[$displayType]) OR (isset($displayResultsFooterDefault[$displayType]) AND ($displayResultsFooterDefault[$displayType] != "hidden"))))
+		if ((preg_match("/^(Print|Mobile)$/i", $viewType)) AND (preg_match("/^cli/i", $client)) AND ($wrapResults = "0") AND (!isset($displayResultsFooterDefault[$displayType]) OR (isset($displayResultsFooterDefault[$displayType]) AND ($displayResultsFooterDefault[$displayType] != "hidden"))))
 			$NoColumns++;
 
 		// Initialize array variables:
@@ -187,13 +191,13 @@
 
 					// Print a column with a checkbox:
 					// Note: we omit the results footer in print/mobile view ('viewType=Print' or 'viewType=Mobile'), for CLI clients, and when outputting only a partial document structure ('wrapResults=0')!
-					if ((!preg_match("/^Print$/i", $viewType)) AND (!preg_match("/^cli/i", $client)) AND ($wrapResults != "0") AND (!isset($displayResultsFooterDefault[$displayType]) OR (isset($displayResultsFooterDefault[$displayType]) AND ($displayResultsFooterDefault[$displayType] != "hidden"))))
-					{
+					//if ((!preg_match("/^Srint$/i", $viewType)) AND (!preg_match("/^sli/i", $client)) AND ($wrapResults != "0") AND (!isset($displayResultsFooterDefault[$displayType]) OR (isset($displayResultsFooterDefault[$displayType]) AND ($displayResultsFooterDefault[$displayType] != "hidden"))))
+					//{
 						$recordData .= "\n\t<td align=\"center\" valign=\"top\" width=\"10\">";
 
 						// - Print a checkbox form element:
 						if (!isset($displayResultsFooterDefault[$displayType]) OR (isset($displayResultsFooterDefault[$displayType]) AND ($displayResultsFooterDefault[$displayType] != "hidden")))
-							$recordData .= "\n\t\t<input type=\"checkbox\" onclick=\"updateAllRecs();\" name=\"marked[]\" value=\"" . $row["serial"] . "\" title=\"" . $loc["selectRecord"] . "\">";
+							$recordData .= "\n\t\t<input type=\"checkbox\" class=\"checkbox\" name=\"marked[]\" value=\"" . $row["serial"] . "\" title=\"" . $loc["selectRecord"] . "\">";
 
 						if (!empty($row["orig_record"]))
 						{
@@ -210,10 +214,10 @@
 						$recordData .= "\n\t\t<div class=\"unapi\"><abbr class=\"unapi-id\" title=\"" . $recordPermaLink . "\"></abbr></div>";
 
 						$recordData .= "\n\t</td>";
-					}
+					//}
 
 					// Print record data as a citation:
-					$recordData .= "\n\t<td id=\"ref" . $row["serial"] . "\" class=\"citation\" valign=\"top\">"
+					$recordData .= "\n\t<td id=\"ref" . $row["serial"] . "\" class=\"citation\" valign=\"top\"><div class=\"callout small\">"
 					             . "\n\t\t" . $record;
 
 					// Display a triangle widget to show more info (keywords, abstract, etc) under each citation:
@@ -228,7 +232,7 @@
 							$toggleVisibilityFunction = "toggleVisibility";
 
 						$recordData .= '<div class="showhide">'
-						             . '<a href="#" data-div="' . moreinfo . $row["serial"] . '"><i class="fa fa-plus"></i></a>'
+						             . '<a href="#" class="openclose hollow button" data-div="' . moreinfo . $row["serial"] . '"><i class="fi-plus"></i> <span>Show details</span> </a>'
 						             . '</div>'
 						             . '<div id="moreinfo' . $row['serial'] . '" class="moreinfo">';
 
@@ -247,7 +251,7 @@
 								else // don't hotlink field items
 									$recordData .= encodeField($field, $row[$field], $fieldSpecificSearchReplaceActionsArray2, $encodingExceptionsArray); // function 'encodeField()' is defined in 'include.inc.php'
 
-								$recordData .= '</div>';
+								$recordData .= '<hr></div>';
 							}
 						}
 
@@ -260,18 +264,18 @@
 						else
 							$target = "";
 
-						$recordData .= "\n\t\t\t\t<div class=\"permalink\"><i class=\"fa fa-link\"></i>&nbsp;<a href=\"/bibliography/?Record=" . $row['serial'] . "\"" . $target . " title=\"" . $loc["LinkTitle_Permalink"] . "\">";
+						$recordData .= "\n\t\t\t\t<div class=\"permalink callout small\"><i class=\"fi-link\"></i>&nbsp;<a href=\"/bibliography/?Record=" . $row['serial'] . "\"" . $target . " title=\"" . $loc["LinkTitle_Permalink"] . "\">";
 
 						if (preg_match("/^Print$/i", $viewType)) // for print view, we use the URL as link title
-							$recordData .= $recordPermaLink;
+							$recordData .= "full bibliographic record";
 						else
-							$recordData .= $loc["PermalinkShort"];
+							$recordData .= "full bibliographic record";
 
-						$recordData .= "</a></div>";
+						$recordData .= "</a></div><hr>";
 
 						// - Print additional links to cite/export the current record:
 						//   Note: we omit the additional links in print view ('viewType=Print')
-						if (!preg_match("/^Print$/i", $viewType))
+						if (preg_match("/^Print$/i", $viewType))
 						{
 							// -- Print cite links:
 							if (isset($_SESSION['user_permissions']) AND preg_match("/allow_cite/", $_SESSION['user_permissions']) AND isset($_SESSION['user_cite_formats']))
@@ -279,13 +283,13 @@
 								$userCiteFormatsArray = preg_split("/ *; */", $_SESSION['user_cite_formats'], -1, PREG_SPLIT_NO_EMPTY); // get a list of the user's cite formats (the 'PREG_SPLIT_NO_EMPTY' flag causes only non-empty pieces to be returned)
 
 								$recordData .= "\n\t\t\t\t<div class=\"citelinks\">"
-								             . "<i class=\"fa fa-download\"></i>&nbsp;" . $loc["SaveCitation"] . ":";
+								             . "<i class=\"fi-download\"></i>&nbsp;" . $loc["SaveCitation"] . ":";
 
 								foreach ($userCiteFormatsArray as $citeFormat)
 									if (!preg_match("/^html$/i", $citeFormat)) // for now, we exclude the "HTML" cite format (as it's not any different to the regular Citation view HTML output)
-										$recordData .= "\n\t\t\t\t\t&nbsp;<a href=\"" . $baseURL . generateURL("show.php", $citeFormat, array("record" => $row['serial']), true, "", "", $citeStyle, $citeOrder) . "\" title=\"" . $loc["LinkTitle_SaveCitationFormat_Prefix"] . $citeFormat . $loc["LinkTitle_SaveCitationFormat_Suffix"] . "\">" . $citeFormat . "</a>";
+										$recordData .= "\n\t\t\t\t\t<a href=\"" . $baseURL . generateURL("show.php", $citeFormat, array("record" => $row['serial']), true, "", "", $citeStyle, $citeOrder) . "\" title=\"" . $loc["LinkTitle_SaveCitationFormat_Prefix"] . $citeFormat . $loc["LinkTitle_SaveCitationFormat_Suffix"] . "\" data-cite=\"".$citeFormat."\" data-record=\"".$row['serial']."\">" . $citeFormat . "</a>";
 
-								$recordData .= "\n\t\t\t\t</div>";
+								$recordData .= "\n\t\t\t\t<hr></div>";
 							}
 
 							// -- Print export links:
@@ -294,17 +298,17 @@
 								$userExportFormatsArray = preg_split("/ *; */", $_SESSION['user_export_formats'], -1, PREG_SPLIT_NO_EMPTY); // get a list of the user's export formats
 
 								$recordData .= "\n\t\t\t\t<div class=\"exportlinks\">"
-								             . "<i class=\"fa fa-download\"></i>&nbsp;" . $loc["ExportRecord"] . ":";
+								             . "<i class=\"fi-page-export\"></i>&nbsp;" . $loc["ExportRecord"] . ":";
 
 								foreach ($userExportFormatsArray as $exportFormat)
-									$recordData .= "\n\t\t\t\t\t&nbsp;<a href=\"" . $baseURL . generateURL("show.php", $exportFormat, array("record" => $row['serial'], "exportType" => "file"), true, "", "", $citeStyle) . "\" title=\"" . $loc["LinkTitle_ExportRecordFormat_Prefix"] . $exportFormat . $loc["LinkTitle_ExportRecordFormat_Suffix"] . "\">" . $exportFormat . "</a>";
+									$recordData .= "\n\t\t\t\t\t<a href=\"" . $baseURL . generateURL("show.php", $exportFormat, array("record" => $row['serial'], "exportType" => "file"), true, "", "", $citeStyle) . "\" title=\"" . $loc["LinkTitle_ExportRecordFormat_Prefix"] . $exportFormat . $loc["LinkTitle_ExportRecordFormat_Suffix"] . "\">" . $exportFormat . "</a>";
 
 								$recordData .= "\n\t\t\t\t</div>";
 							}
 						}
 
 						$recordData .= "\n\t\t\t</div>"
-						             . "\n\t\t</div>";
+						             . "\n\t\t</div></div>";
 					}
 
 					$recordData .= "\n\t</td>";
@@ -456,7 +460,7 @@
 		}
 		else
 		{
-			$htmlData .= "\n<table id=\"citations\" class=\"results\" align=\"center\" border=\"0\" cellpadding=\"7\" cellspacing=\"0\" width=\"95%\" summary=\"This table holds the database results for your query\">"
+			$htmlData .= "\n<table id=\"citations\" class=\"results stack\" align=\"center\" border=\"0\" cellpadding=\"7\" cellspacing=\"0\" width=\"95%\" summary=\"This table holds the database results for your query\">"
 			           . $recordData
 			           . "\n</table>";
 		}

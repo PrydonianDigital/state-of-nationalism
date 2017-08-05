@@ -30,25 +30,15 @@
 							</div>
 						</form>
 						<form class="bib-filters row group">
-							<div class="small-12 medium-6 columns">
+							<div class="small-12 medium-4 columns">
 								<h5><strong>Cite Style</strong>:</h5>
 								<select id="citeStyle" name="citeStyle" title="choose your preferred citation style">
 									<option value="NISE" selected="selected">NISE</option>
-									<option value="APA">APA</option>
-									<option value="AMA">AMA</option>
-									<option value="MLA">MLA</option>
-									<option value="Chicago">Chicago</option>
+									<option value="SNM">SNM</option>
 									<option value="Harvard%201">Harvard 1</option>
-									<option value="Harvard%202">Harvard 2</option>
-									<option value="Harvard%203">Harvard 3</option>
-									<option value="Vancouver">Vancouver</option>
-									<option value="Deep%20Sea%20Res">Deep Sea Res</option>
-									<option value="J%20Glaciol">J Glaciol</option>
-									<option value="Polar%20Biol">Polar Biol</option>
-									<option value="Text%20Citation">Text Citation</option>
 								</select>
 							</div>
-							<div class="small-12 medium-6 columns">
+							<div class="small-12 medium-4 columns">
 								<h5><strong>Sort By</strong>:</h5>
 								<select name="citeOrder" id="citeOrder">
 									<option value="author" selected="selected">Author</option>
@@ -56,6 +46,15 @@
 									<option value="type">Type</option>
 									<option value="title">Title</option>
 								</select>
+							</div>
+							<div class="small-12 medium-4 columns">
+								<h5><strong>Per Page</strong>:</h5>
+								<div class="input-group">
+									<input id="perPage" type="text" class="input-group-field" value="50">
+									<div class="input-group-button">
+										<input class="button" value="Change" type="submit" id="changePerPage">
+									</div>
+								</div>
 							</div>
 						</form>
 					</div>
@@ -65,29 +64,25 @@
 
 		<div class="bib-back row">
 			<div class="small-12 columns">
-				<h4><a href="/bibliography/" class="backMeUp"><i class="fa fa-arrow-left"></i> Back</a></h4>
+				<h4><a href="javascript: history.go(-1)" class="backMeUp"><i class="fi-arrow-left"></i> Back</a></h4>
 			</div>
 		</div>
+
+		<ul class="pagination toppag text-center" role="navigation" aria-label="Pagination"></ul>
 
 		<div id="bibliography"></div>
 
+		<ul class="pagination bottompag text-center" role="navigation" aria-label="Pagination"></ul>
+
 		<div class="bib-back row">
 			<div class="small-12 columns">
-				<h4><a href="/bibliography/" class="backMeUp"><i class="fa fa-arrow-left"></i> Back</a></h4>
+				<h4><a href="javascript: history.go(-1)" class="backMeUp"><i class="fi-arrow-left"></i> Back</a></h4>
 			</div>
 		</div>
 
 	</div>
 
-	<?php get_sidebar('page'); ?>
-
-	<div class="large reveal" id="record" data-reveal>
-		<div id="recordDetails"></div>
-		<button class="close-button" data-close aria-label="Close reveal" type="button">
-			<span aria-hidden="true">&times;</span>
-		</button>
-		<a class="button" data-close aria-label="Close reveal">Close</a>
-	</div>
+	<?php get_sidebar('sidebar'); ?>
 
 </div>
 
@@ -103,7 +98,7 @@ $.urlParam = function(name){
 	$author =  htmlspecialchars($_GET['Author']);
 	$keyword = htmlspecialchars($_GET['Keywords']);
 	$area = htmlspecialchars($_GET['Area']);
-	$abbrj = htmlspecialchars($_GET['Abbreviated Journal']);
+	$abbrj = htmlspecialchars($_GET['abbrev_journal']);
 	$pub = htmlspecialchars($_GET['Publication']);
 	$year = htmlspecialchars($_GET['Year']);
 	if($record != '') {
@@ -138,8 +133,7 @@ $.urlParam = function(name){
 	elseif($abbrj != '') {
 ?>
 		<script>
-			alert('foo')
-		abbrj($.urlParam('Abbreviated Journal'));
+		abbrj($.urlParam('abbrev_journal'));
 		</script>
 <?php
 	}
@@ -159,7 +153,8 @@ $.urlParam = function(name){
 	} else {
 ?>
 		<script>
-		bibliography();
+			var showRows = '50';
+		bibliography(showRows);
 		</script>
 <?php
 	}

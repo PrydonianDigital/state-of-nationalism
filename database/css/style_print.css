@@ -152,15 +152,15 @@ h5 {
 }
 
 .pageheader {
-	
+
 }
 
 .pagefooter {
-	
+
 }
 
 .results {
-	
+
 }
 
 .resultsheader {
@@ -178,7 +178,7 @@ div.resultsfooter {
 }
 
 .showhide {
-	
+
 }
 
 #resultoptions {
@@ -186,15 +186,15 @@ div.resultsfooter {
 }
 
 .resultnav {
-	
+
 }
 
 .mainnav {
-	
+
 }
 
 .pagenav {
-	
+
 }
 
 .viewnav {
@@ -202,7 +202,7 @@ div.resultsfooter {
 }
 
 #columns {
-	
+
 }
 
 #columns .itemlinks a {
@@ -215,7 +215,7 @@ div.resultsfooter {
 }
 
 #details {
-	
+
 }
 
 #details .itemlinks a {
@@ -228,11 +228,11 @@ div.resultsfooter {
 }
 
 #citations {
-	
+
 }
 
 .citation {
-	
+
 }
 
 .citation .showhide {
@@ -268,7 +268,7 @@ div.resultsfooter {
 }
 
 #error {
-	
+
 }
 
 #queryhistory {
@@ -294,7 +294,7 @@ div.resultsfooter {
 }
 
 .links {
-	
+
 }
 
 .sect {
@@ -313,11 +313,10 @@ div.resultsfooter {
 }
 
 #queryform {
-	
+
 }
 
 #resultactions {
-	display: none;
 }
 
 #searchopt {
@@ -338,7 +337,7 @@ div.resultsfooter {
 }
 
 .toggleimg {
-	
+
 }
 
 .toggletxt {

@@ -1,4 +1,4 @@
-	<footer class="footer secondary">
+	<footer class="footer secondary" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
 
 		<div class="row">
 
@@ -48,6 +48,8 @@
 	</div>
 
 </div>
+
+<a href="#0" class="cd-top"><i class="fi-arrow-up"></i></a>
 
 <?php wp_footer(); ?>
 

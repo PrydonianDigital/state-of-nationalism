@@ -27,6 +27,85 @@
 		) );
 	}
 
+	add_action( 'cmb2_init', 'faq' );
+	function faq() {
+		$prefix = '_faq_';
+		$cmb_faq = new_cmb2_box( array(
+			'id'			=> 'faq',
+			'title'			=> 'FAQ',
+			'object_types'  => array( 'page' ),
+			'show_on'	  => array( 'key' => 'page-template', 'value' => 'template-how-to-contribute.php' ),
+			'show_in_rest'	=> true,
+		) );
+		$cmb_faq_id = $cmb_faq->add_field( array(
+			'id'          => $prefix . 'faq',
+			'type'        => 'group',
+			'description' => 'Add faq records here',
+			'options'     => array(
+				'group_title'   => 'FAQ {#}',
+				'add_button'    => 'Add Another FAQ',
+				'remove_button' => 'Remove FAQ',
+				'sortable'      => true,
+			),
+		) );
+		$cmb_faq->add_group_field($cmb_faq_id, array(
+			'name'			=> 'FAQ Title',
+			'id'			=> 'faqt',
+			'type'			=> 'text',
+		) );
+		$cmb_faq->add_group_field($cmb_faq_id, array(
+			'name'			=> 'FAQ Content',
+			'id'			=> 'faqc',
+			'type'			=> 'wysiwyg',
+		) );
+	}
+
+	add_action( 'cmb2_init', 'authors_page' );
+	function authors_page() {
+		$prefix = '_author_';
+		$cmb_author = new_cmb2_box( array(
+			'id'			=> 'author',
+			'title'			=> 'Author',
+			'object_types'  => array( 'post' ),
+			'show_in_rest'	=> true,
+		) );
+		$cmb_author_id = $cmb_author->add_field( array(
+			'id'          => $prefix . 'author',
+			'type'        => 'group',
+			'description' => 'Add Author',
+			'options'     => array(
+				'group_title'   => 'Author {#}',
+				'add_button'    => 'Add Another Author',
+				'remove_button' => 'Remove Author',
+				'sortable'      => true,
+			),
+		) );
+		$cmb_author->add_group_field($cmb_author_id, array(
+			'name'			=> 'Author',
+			'id'			=> 'author',
+			'type'			=> 'select',
+			'options_cb'	=> 'att_link',
+		) );
+	}
+
+	function att_link_start( $query_args ) {
+		$args = wp_parse_args( $query_args, array(
+			'post_type'   => 'author',
+			'numberposts' => -1,
+		) );
+		$posts = get_posts( $args );
+		$post_options = array();
+		if ( $posts ) {
+			foreach ( $posts as $post ) {
+			  $post_options[ $post->ID ] = $post->post_title;
+			}
+		}
+		return $post_options;
+	}
+	function att_link() {
+		return att_link_start( array( 'post_type' => 'author', 'numberposts' => -1 ) );
+	}
+
 add_filter( 'cmb_meta_boxes' , 'be_metaboxes' );
 /**
  * Create Metaboxes

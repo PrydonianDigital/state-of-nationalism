@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js no-svg">
-<head>
+<head itemscope itemtype="http://schema.org/WebSite">
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="profile" href="http://gmpg.org/xfn/11">
@@ -23,8 +23,9 @@
 			$thumb = get_the_post_thumbnail_url( $image, 'full' );
 		?>
 		<?php get_template_part('parts/top', 'nav'); ?>
-		<div class="hero-section" style="background: url(<?php echo $thumb; ?>)">
+		<div class="hero-section" style="background: url(<?php echo $thumb; ?>)"  role="banner" itemscope itemtype="http://schema.org/WPHeader">
 			<div class="hero-section-text">
-				<h1>Search</h1>
+				<h1>Search for "<?php the_search_query(); ?>"</h1>
 			</div>
 		</div>
+

@@ -23,7 +23,7 @@ body {
 	background: #FFFFFF;
 	color: #000000;
 }
-
+.hideMe {display: none;}
 pre, code {
 	font-family: monaco,courier,monospace;
 	font-size: 7pt;
@@ -153,15 +153,15 @@ h5 {
 }
 
 .pageheader {
-	
+
 }
 
 .pagefooter {
-	
+
 }
 
 .results {
-	
+
 }
 
 hr.results {
@@ -187,7 +187,7 @@ div.resultsfooter {
 }
 
 .showhide {
-	
+
 }
 
 #loginInfo {
@@ -487,15 +487,15 @@ form[name="simpleSearch"] .searchSuggestions, form[name="simpleSearch"] .suggest
 }
 
 .resultnav {
-	
+
 }
 
 .mainnav {
-	
+
 }
 
 .pagenav {
-	
+
 }
 
 .viewnav {
@@ -542,7 +542,7 @@ form[name="simpleSearch"] .searchSuggestions, form[name="simpleSearch"] .suggest
 }
 
 .citation {
-	
+
 }
 
 .citation .showhide {
@@ -587,7 +587,7 @@ form[name="simpleSearch"] .searchSuggestions, form[name="simpleSearch"] .suggest
 }
 
 #error {
-	
+
 }
 
 #queryhistory {
@@ -617,7 +617,7 @@ form[name="simpleSearch"] .searchSuggestions, form[name="simpleSearch"] .suggest
 }
 
 .links {
-	
+
 }
 
 .sect {
@@ -636,7 +636,7 @@ form[name="simpleSearch"] .searchSuggestions, form[name="simpleSearch"] .suggest
 }
 
 #queryform {
-	
+
 }
 
 #resultactions {
@@ -736,7 +736,7 @@ form[name="simpleSearch"] .searchSuggestions, form[name="simpleSearch"] .suggest
 }
 
 .toggleimg {
-	
+
 }
 
 .toggletxt {

@@ -23,6 +23,7 @@
 	// TODO: - Refactor so that query builder will use a few common functions
 	//       - I18n
 
+	$base_url="http://".$_SERVER['SERVER_NAME'].'/bibliography/';
 
 	// Incorporate some include files:
 	include 'initialize/db.inc.php'; // 'db.inc.php' is included to hide username and password
@@ -590,6 +591,62 @@
 
 
 	// ...else, display HTML:
+	if(!preg_match("/^(file)$/i", $exportType)){
+		echo '
+		<div class="row hideMe">
+			<div class="small-12 columns">
+				<div class="button-group">
+					<a class="select_all button hollow">Select All</a>
+					<a class="deselect_all button hollow">Deselect All</a>
+				</div>
+			</div>
+		</div>';
+		echo '
+		<div class="row hideExport hideMe">
+			<div class="small-12 medium-6 columns">
+				<h5>Save Citations:</h5>
+				<div class="input-group">
+					<input name="citeStyle" value="APA" type="hidden">
+					<input name="citeOrder" value="" type="hidden">
+					<input name="headerMsg" value="" type="hidden">
+					<span class="input-group-label">Format:</span>
+					<select id="citeType" name="citeType" class="input-group-field" title="choose how your reference list shall be returned">
+						<option value="html">html</option>
+						<option value="rtf" selected="">RTF</option>
+						<option value="PDF">PDF</option>
+						<option value="LaTeX">LaTeX</option>
+					</select>
+					<div class="input-group-button">
+						<input name="submit" value="Cite" id="Cite" class="button" title="build a list of references for all chosen records" type="submit">
+					</div>
+				</div>
+			</div>
+			<div class="small-12 medium-6 columns">
+				<h5>Export Records:</h5>
+				<div class="input-group">
+					<input name="exportType" value="file" type="hidden">
+					<span class="input-group-label">Format:</span>
+					<select id="exportFormat" name="exportFormat" title="choose the export format for your references" class="input-group-field">
+						<option value="ADS">ADS</option>
+						<option value="BibTeX">BibTeX</option>
+						<option value="Endnote">Endnote</option>
+						<option value="ISI">ISI</option>
+						<option value="RIS">RIS</option>
+						<option value="Atom+XML">Atom XML</option>
+						<option value="MODS+XML">MODS XML</option>
+						<option value="OAI_DC+XML">OAI_DCXML</option>
+						<option value="ODF+XML">ODF XML</option>
+						<option value="SRW_DC+XML">SRW_DC XML</option>
+						<option value="SRW_MODS+XML">SRW_MODS XML</option>
+						<option value="Word+XML">Word XML</option>
+					</select>
+					<div class="input-group-button">
+						<input name="submit" value="Export" id="Export" class="button" title="export all chosen records" type="submit">
+					</div>
+				</div>
+			</div>
+		</div>';
+	}
 
 	// (4a) DISPLAY header:
 	// First, build the appropriate SQL query in order to embed it into the 'your query' URL:
@@ -1011,7 +1068,7 @@
 
 
 				// 5) And start a TABLE, with column headers
-				echo "\n<table id=\"columns\" class=\"results\" align=\"center\" border=\"0\" cellpadding=\"7\" cellspacing=\"0\" width=\"95%\" summary=\"This table holds the database results for your query\">";
+				echo "\n<table id=\"columns\" class=\"results stack\" align=\"center\" border=\"0\" cellpadding=\"7\" cellspacing=\"0\" width=\"95%\" summary=\"This table holds the database results for your query\">";
 
 				//    for the column headers, start a TABLE ROW ...
 				echo "\n<tr>";
@@ -1184,7 +1241,7 @@
 						   . "&amp;showRows=" . $showRows
 						   . "&amp;submit="
 						   . "&amp;viewType=" . $viewType
-						   . "\">< class=\"fa fa-book\"></i></a>&nbsp;&nbsp;";
+						   . "\"><i class=\"fi-bookmark\"></i></a>&nbsp;&nbsp;";
 
 						echo "\n\t</td>";
 					}
@@ -1198,7 +1255,7 @@
 
 				// BEGIN RESULTS FOOTER --------------------
 				// Note: we omit the results footer, browse links & query form in print/mobile view ('viewType=Print' or 'viewType=Mobile'), for CLI clients, and when outputting only a partial document structure ('wrapResults=0')!
-				if ((!preg_match("/^(Print|Mobile)$/i", $viewType)) AND (!preg_match("/^cli/i", $client)) AND ($wrapResults != "0"))
+				if ((preg_match("/^(Print|Mobile)$/i", $viewType)) AND (preg_match("/^cli/i", $client)) AND ($wrapResults = "0"))
 				{
 					// Again, insert the (already constructed) BROWSE LINKS
 					// (i.e., a TABLE with links for "previous" & "next" browsing, as well as links to intermediate pages)
@@ -1648,7 +1705,7 @@
 
 					// Print out an URL that links directly to this record:
 					$recordData .= "\n<tr>" // start a new TR (Table Row)
-					             . "\n\t<td colspan=\"$ColspanFields\" align=\"center\" class=\"smaller\"><a href=\"/bibliography/?Record=" . $row['serial'] . "\" title=\"" . $loc["LinkTitle_Permalink"] . "\">" . $loc["PermalinkLong"] . "</a>"
+					             . "\n\t<td colspan=\"$ColspanFields\" align=\"center\" class=\"smaller\"><a href=\"?Record=" . $row['serial'] . "\" title=\"" . $loc["LinkTitle_Permalink"] . "\"><strong><i class=\"fi-link\"></i>&nbsp;" . $loc["PermalinkLong"] . "</strong></a>"
 					             . "<div class=\"unapi\"><abbr class=\"unapi-id\" title=\"" . $databaseBaseURL . "show.php?Record=" . $row["serial"] . "\"></abbr></div></td>" // re <abbr> tag see <http://unapi.info/specs/>
 					             . "\n</tr>";
 
@@ -2084,8 +2141,8 @@
 			$ResultsFooterRow = "\n<div class=\"resultsfooter\">";
 
 			$ResultsFooterRow .= "\n<div class=\"showhide\">"
-			                   . "\n\t<a href='#'>woo</a>"
-			                   . "\n\t\t<i class=\"fa fa-chevron-right\"></i>"
+			                   . "\n\t<a href='#'>"
+			                   . "\n\t\t<i class=\"fi-chevron-right\"></i>"
 			                   . "\n\t\t<span id=\"resultsFooterToggletxt\" class=\"toggletxt\">" . $resultsFooterInitialToggleText . "</span>"
 			                   . "\n\t</a>"
 			                   . "\n</div>";
@@ -2197,8 +2254,8 @@
 
 
 			// Export functionality:
-			if ((!isset($_SESSION['loginEmail']) AND ($allowAnonymousGUIExport == "yes")) OR (isset($_SESSION['loginEmail']) AND isset($_SESSION['user_permissions']) AND preg_match("/allow_export|allow_batch_export/", $_SESSION['user_permissions']))) // if a user is logged in AND the 'user_permissions' session variable contains either 'allow_export' or 'allow_batch_export', show form elements to export the chosen records:
-			{
+			//if ((!isset($_SESSION['loginEmail']) AND ($allowAnonymousGUIExport == "yes")) OR (isset($_SESSION['loginEmail']) AND isset($_SESSION['user_permissions']) AND preg_match("/allow_export|allow_batch_export/", $_SESSION['user_permissions']))) // if a user is logged in AND the 'user_permissions' session variable contains either 'allow_export' or 'allow_batch_export', show form elements to export the chosen records:
+			//{
 				if (!isset($_SESSION['user_export_formats']))
 					$exportFormatDisabled = " disabled"; // disable the format popup if the session variable holding the user's export formats isn't available
 				else
@@ -2221,7 +2278,7 @@
 				$ResultsFooterRow .= "\n\t\t</select>"
 				                   . "\n\t\t<input type=\"submit\" name=\"submit\" value=\"Export\"" . addAccessKey("attribute", "export") . " title=\"export all chosen records" . addAccessKey("title", "export") . "\"$exportFormatDisabled>"
 				                   . "\n\t</fieldset>";
-			}
+			//}
 
 
 			$ResultsFooterRow .= "\n</div>"
@@ -5619,7 +5676,7 @@
 		}
 		else // return HTML
 		{
-			$nothingFoundFeedback = "\n<table id=\"error\" class=\"results\" align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"10\" width=\"95%\" summary=\"This table holds the database results for your query\">";
+			$nothingFoundFeedback = "\n<table id=\"error\" class=\"results stack\" align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"10\" width=\"95%\" summary=\"This table holds the database results for your query\">";
 
 			if ($nothingChecked)
 				// Inform the user that no records were selected:
@@ -5638,6 +5695,65 @@
 
 
 		return $nothingFoundFeedback;
+
+	}
+	if(!preg_match("/^(file)$/i", $exportType)){
+		echo '<div id="rowsFound" data-rows="'. $rowsFound . '"></div>';
+		echo '
+		<div class="row hideMe">
+			<div class="small-12 columns">
+				<div class="button-group">
+					<a class="select_all button hollow">Select All</a>
+					<a class="deselect_all button hollow">Deselect All</a>
+				</div>
+			</div>
+		</div>';
+		echo '
+		<div class="row hideExport hideMe">
+			<div class="small-12 medium-6 columns">
+				<h5>Save Citations:</h5>
+				<div class="input-group">
+					<input name="citeStyle" value="APA" type="hidden">
+					<input name="citeOrder" value="" type="hidden">
+					<input name="headerMsg" value="" type="hidden">
+					<span class="input-group-label">Format:</span>
+					<select id="citeType" name="citeType" class="input-group-field" title="choose how your reference list shall be returned">
+						<option value="html">html</option>
+						<option value="rtf" selected="">RTF</option>
+						<option value="PDF">PDF</option>
+						<option value="LaTeX">LaTeX</option>
+					</select>
+					<div class="input-group-button">
+						<input name="submit" value="Cite" id="Cite" class="button" title="build a list of references for all chosen records" type="submit">
+					</div>
+				</div>
+			</div>
+			<div class="small-12 medium-6 columns">
+				<h5>Export Records:</h5>
+				<div class="input-group">
+					<input name="exportType" value="file" type="hidden">
+					<span class="input-group-label">Format:</span>
+					<select id="exportFormat" name="exportFormat" title="choose the export format for your references" class="input-group-field">
+						<option value="ADS">ADS</option>
+						<option value="BibTeX">BibTeX</option>
+						<option value="Endnote">Endnote</option>
+						<option value="ISI">ISI</option>
+						<option value="RIS">RIS</option>
+						<option value="Atom+XML">Atom XML</option>
+						<option value="MODS+XML">MODS XML</option>
+						<option value="OAI_DC+XML">OAI_DCXML</option>
+						<option value="ODF+XML">ODF XML</option>
+						<option value="SRW_DC+XML">SRW_DC XML</option>
+						<option value="SRW_MODS+XML">SRW_MODS XML</option>
+						<option value="Word+XML">Word XML</option>
+					</select>
+					<div class="input-group-button">
+						<input name="submit" value="Export" id="Export" class="button" title="export all chosen records" type="submit">
+					</div>
+				</div>
+			</div>
+		</div>';
+
 	}
 
 	// --------------------------------------------------------------------
@@ -5724,8 +5840,8 @@
 			if ($showLinks == "0") // this is kinda superfluous since, for '$showLinks=0', the link isn't shown in the first place
 				$queryParametersArray["showLinks"] = $showLinks;
 
-			$links .= "\n\t\t<a href=\"/bibliography/?Record=". $row["serial"] . "\" class=\"modal\" title=\"View record\" data-record=\"rec".$row["serial"]."\">"
-			        . "<i class=\"fa fa-book\" aria-hidden=\"true\"></i></a>";
+			$links .= "\n\t\t<a href=\"?Record=". $row["serial"] . "\" data-record=\"".$row["serial"]."\" class=\"modal\" title=\"View record\">"
+			        . "<i class=\"fi-book\" aria-hidden=\"true\"></i></a>";
 
 			// Old code that directly generates a 'search.php' URL which points to Details view for this record:
 //			// Construct the SQL query:
@@ -5805,10 +5921,10 @@
 		// if a DOI number exists for this record, we'll prefer it as link, otherwise we use the URL (if available):
 		// (note, that in List view, we'll use the same icon, no matter if the DOI or the URL is used for the link)
 		if (in_array("doi", $showLinkTypes) AND !empty($row["doi"]))
-			$links .= "\n\t\t<a href=\"http://dx.doi.org/" . rawurlencode($row["doi"]) . "\"" . $target . "><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
+			$links .= "\n\t\t<a href=\"http://dx.doi.org/" . rawurlencode($row["doi"]) . "\"" . $target . "><i class=\"fi-share\" aria-hidden=\"true\"></i></a>";
 
 		elseif (in_array("url", $showLinkTypes) AND !empty($row["url"])) // 'htmlentities()' is used to convert any '&' into '&amp;'
-			$links .= "\n\t\t<a href=\"" . encodeHTML($row["url"]) . "\"" . $target . "><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
+			$links .= "\n\t\t<a href=\"" . encodeHTML($row["url"]) . "\"" . $target . "><i class=\"fi-share\" aria-hidden=\"true\"></i></a>";
 
 		// if an ISBN number exists for the current record, provide a link to an ISBN resolver:
 		elseif (in_array("isbn", $showLinkTypes) AND !empty($isbnURLFormat) AND !empty($row["isbn"]))
@@ -5825,14 +5941,14 @@
 			$encodedURL = str_replace(" ", "%20", $encodedURL); // ensure that any spaces are also properly urlencoded
 
 			if (!empty($isbnURL))
-				$links .= "\n\t\t<a href=\"" . $encodedURL . "\"" . $target . "><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
+				$links .= "\n\t\t<a href=\"" . $encodedURL . "\"" . $target . "><i class=\"fi-share\" aria-hidden=\"true\"></i></a>";
 		}
 
 		// if still no link was generated, we'll provide a link to an OpenURL resolver:
 		elseif (in_array("xref", $showLinkTypes) AND !empty($openURLResolver))
 		{
 			$openURL = openURL($row); // function 'openURL()' is defined in 'openurl.inc.php'
-			$links .= "\n\t\t<a href=\"" . $openURL . "\"" . $target . "><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
+			$links .= "\n\t\t<a href=\"" . $openURL . "\"" . $target . "><i class=\"fi-share\" aria-hidden=\"true\"></i></a>";
 		}
 
 		// insert COinS (ContextObjects in Spans):
